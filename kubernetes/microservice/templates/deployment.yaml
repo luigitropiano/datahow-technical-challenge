@@ -1,0 +1,35 @@
+{{- range .Values.microservices }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $.Release.Name }}-microservice-{{ .name }}
+  namespace: {{ $.Release.Namespace }}
+spec:
+  replicas: {{ .replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ $.Release.Name }}-microservice-{{ .name }}
+  template:
+    metadata:
+      labels:
+        app: {{ $.Release.Name }}-microservice-{{ .name }}
+    spec:
+      containers:
+      - name: microservice-{{ .name }}
+        image: {{ $.Values.image }}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: {{ $.Values.containerPort }}
+        env:
+        - name: DATAHOW_GETME
+          valueFrom:
+            configMapKeyRef:
+              name: {{ $.Release.Name }}-config
+              key: INSTANCE_{{ .name | upper }}_NAME
+        resources: # Add resource limits
+          requests:
+            {{- toYaml $.Values.resources.requests | nindent 12 }}
+          limits:
+            {{- toYaml $.Values.resources.limits | nindent 12 }}
+---
+{{- end }}

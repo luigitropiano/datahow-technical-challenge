@@ -1,0 +1,4 @@
+namespaceOverride: "microservice"
+controller:
+  nodeSelector:
+    kubernetes.io/hostname: "kind-worker"

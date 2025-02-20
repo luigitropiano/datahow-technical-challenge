@@ -1,0 +1,17 @@
+{{- range .Values.microservices }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $.Release.Name }}-microservice-{{ .name }}-service
+  namespace: {{ $.Release.Namespace }}
+spec:
+  selector:
+    app: {{ $.Release.Name }}-microservice-{{ .name }}
+  ports:
+    - protocol: TCP
+      port: {{ .servicePort | default $.Values.servicePort }}
+      targetPort: {{ $.Values.containerPort }}
+      name: http
+  type: {{ .serviceType | default "ClusterIP" }}
+---
+{{- end }}

@@ -1,0 +1,24 @@
+image: ghcr.io/luigitropiano/datahow-technical-challenge:develop
+containerPort: 5000
+
+microservices:
+  - name: one
+    displayName: ServiceOne
+    servicePort: 8080
+    replicaCount: 2
+    host: me1.local
+    path: /me1
+  - name: two
+    displayName: ServiceTwo
+    servicePort: 8080
+    replicaCount: 3
+    host: me2.local
+    path: /me2
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 200m
+    memory: 256Mi
